@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TodoRequest;
 use App\Models\Todo;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -37,10 +38,11 @@ class TodoController extends Controller
         $request->validated();
 
         $user = auth()->user();
+        $todo = new Todo($request->all());
         $todo->user()->associate($user);
         $todo->save();
 
-        return $this->apiSuccess($todo->load('user'))
+        return $this->apiSuccess($todo->load('user'));
     }
 
     /**
@@ -61,7 +63,7 @@ class TodoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(tODORequest $request,Todo $request)
+    public function update(TodoRequest $request,Todo $todo)
     {
         $request->validated();
         $todo->todo = $request->todo;
